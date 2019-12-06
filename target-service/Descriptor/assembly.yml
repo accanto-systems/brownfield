@@ -48,6 +48,8 @@ composition:
         value: core
       resourceManager:
         value: brent
+      host: 
+        value: ${asterisk.ip}
       stack_id:
         value: ${adopt.shared_stack_id}
     type: $lmctl:/contains:/shared:/descriptor_name

@@ -16,7 +16,8 @@
    - name: Start Collectd for metric publication
      become: yes
      raw: "nohup collectd -C /etc/collectd/collectd.conf < /dev/null > /dev/null 2>&1"
+     when: asterisk_status.stdout.find('asterisk') == -1
 
-   - name: set stack_id to null
-     debug:
-       msg: "remember to set the stack_id to null"
+   - name: set the stack_id to null
+     set_fact: 
+       output__stack_id: ""
