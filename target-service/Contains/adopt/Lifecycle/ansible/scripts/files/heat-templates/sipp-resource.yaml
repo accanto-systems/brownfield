@@ -6,10 +6,12 @@ parameters:
     type: string
     label: Network id
     description: network id
+    default: voice_net
   subnet_id:
     type: string
     label: subnet id
     description: subnet id
+    default: voice_subnet
 
 resources:
   sipp_port: 
