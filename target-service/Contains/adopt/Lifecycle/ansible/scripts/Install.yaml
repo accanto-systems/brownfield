@@ -1,0 +1,17 @@
+---
+- name: Install
+  hosts: all
+  gather_facts: False
+
+  tasks: 
+
+    # abandon legacy stack and grab json abandon file
+
+    # parse abandon file for UUIDs of "things within" and create a variable for each
+
+    # create asterisk adopted stack with asterisk template
+    # set properties.asterisk_stack_id with id
+    # create sipp adopted stack with asterisk template
+    # set properties.sipp_stack_id with id
+    # create shared adopted stack with asterisk template
+    # set properties.shared_stack_id with id

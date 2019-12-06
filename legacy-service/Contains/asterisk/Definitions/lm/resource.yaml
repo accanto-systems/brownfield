@@ -1,0 +1,10 @@
+description: descriptor for asterisk
+properties:
+  ip:
+    description: ip address of the asterisk VM
+lifecycle:
+- Install
+- Configure
+- Start
+- Stop
+- Uninstall

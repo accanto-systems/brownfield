@@ -1,0 +1,17 @@
+schema: '2.0'
+name: legacy-service
+version: '1.0'
+type: Assembly
+contains:
+- name: shared
+  type: Resource
+  resource-manager: brent
+  directory: shared
+- name: asterisk
+  type: Resource
+  resource-manager: brent
+  directory: asterisk
+- name: sipp
+  type: Resource
+  resource-manager: brent
+  directory: sipp

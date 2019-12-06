@@ -1,0 +1,31 @@
+name: assembly::legacy-service::1.0
+description: descriptor for legacy-service
+
+composition:
+  asterisk:
+    properties:
+      deploymentLocation:
+        value: core
+      resourceManager:
+        value: brent
+      ip:
+        value: ${shared.asterisk_ip}
+    type: resource::asterisk-legacy-service::1.0
+  sipp:
+    properties:
+      deploymentLocation:
+        value: core
+      resourceManager:
+        value: brent
+      ip:
+        value: ${shared.sipp_ip}
+      target_ip:
+        value: ${shared.asterisk_ip}
+    type: resource::sipp-legacy-service::1.0
+  shared:
+    properties:
+      deploymentLocation:
+        value: core
+      resourceManager:
+        value: brent
+    type: resource::shared-legacy-service::1.0

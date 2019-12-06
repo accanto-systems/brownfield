@@ -1,0 +1,23 @@
+description: descriptor for sipp
+
+properties:
+  stack_id:
+    description: stack id to adopt
+    volatile: true
+  target_ip:
+    description: target IP of asterisk server
+  network_id:
+    description: id of network
+  subnet_id:
+    description: id of subnet
+  ip: 
+    description: ip address of sipp vm
+    read_only: true
+
+lifecycle:
+- Create
+- Install
+- Configure
+- Start
+- Stop
+- Delete

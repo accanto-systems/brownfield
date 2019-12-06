@@ -1,0 +1,6 @@
+---
+- name: Start
+  hosts: all
+  gather_facts: False
+
+  # remember to set the stack_id to null

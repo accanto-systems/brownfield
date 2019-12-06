@@ -1,0 +1,21 @@
+description: descriptor for asterisk
+
+properties:
+  stack_id:
+    description: stack id to adopt
+    volatile: true
+  network_id:
+    description: id of network
+  subnet_id:
+    description: id of subnet
+  ip: 
+    description: ip address of asterisk vm
+    read_only: true
+
+lifecycle:
+- Create
+- Install
+- Configure
+- Start
+- Stop
+- Delete

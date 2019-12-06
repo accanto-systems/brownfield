@@ -1,0 +1,11 @@
+description: descriptor for infrastructure
+properties:
+  asterisk_ip:
+    description: asterisk ip address
+    read_only: True
+  sipp_ip:
+    description: sipp ip address  
+    read_only: True
+lifecycle:
+- Create
+- Delete

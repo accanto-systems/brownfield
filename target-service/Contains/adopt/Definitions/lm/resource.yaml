@@ -1,0 +1,15 @@
+description: descriptor for Adopt
+
+properties:
+
+  old_stack_id:
+    required: true
+  asterisk_stack_id:
+    read_only: true
+  sipp_stack_id:
+    read_only: true
+  shared_stack_id:
+    read_only: true
+
+lifecycle:
+- Install

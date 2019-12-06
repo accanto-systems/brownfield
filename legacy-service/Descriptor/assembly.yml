@@ -1,0 +1,30 @@
+description: descriptor for legacy-service
+
+composition:
+  asterisk:
+    properties:
+      deploymentLocation: 
+        value: core
+      resourceManager: 
+        value: brent
+      ip: 
+        value: ${shared.asterisk_ip}
+    type: $lmctl:/contains:/asterisk:/descriptor_name
+  sipp:
+    properties:
+      deploymentLocation: 
+        value: core
+      resourceManager: 
+        value: brent
+      ip: 
+        value: ${shared.sipp_ip}
+      target_ip: 
+        value: ${shared.asterisk_ip}
+    type: $lmctl:/contains:/sipp:/descriptor_name
+  shared:
+    properties:
+      deploymentLocation: 
+        value: core
+      resourceManager: 
+        value: brent
+    type: $lmctl:/contains:/shared:/descriptor_name
