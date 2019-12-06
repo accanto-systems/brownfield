@@ -15,6 +15,10 @@ properties:
     read_only: true
   instance_name:
     default: sipp
+  public_ip: 
+    description: public ip address of sipp vm
+    read_only: true
+
 lifecycle:
 - Create
 - Install
