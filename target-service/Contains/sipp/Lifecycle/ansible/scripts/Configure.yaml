@@ -12,27 +12,33 @@
     copy:
       src: ./config/myuac.xml
       dest: /
+    when: properties.stack_id is not defined or properties.stack_id|length==0
 
   - name: create pythonmonitor
     file: 
       path: /pythonmonitor
       state: directory
+    when: properties.stack_id is not defined or properties.stack_id|length==0
 
   - name: copy monitor.py
     template:
       src: ./config/monitor.py
       dest: /pythonmonitor
+    when: properties.stack_id is not defined or properties.stack_id|length==0
 
   - name: create /etc/collectd
     file: 
       path: /etc/collectd
       state: directory
+    when: properties.stack_id is not defined or properties.stack_id|length==0
 
   - name: copy collectd.conf
     template:
       src: ./config/collectd.conf
       dest: /etc/collectd/
+    when: properties.stack_id is not defined or properties.stack_id|length==0
 
   - name: add kafka.lm to hosts
     become: yes
     shell: "echo {{ dl_properties.almip }} kafka.lm >> /etc/hosts"
+    when: properties.stack_id is not defined or properties.stack_id|length==0
