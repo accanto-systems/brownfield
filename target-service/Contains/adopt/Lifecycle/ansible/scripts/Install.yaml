@@ -18,8 +18,11 @@
       apt:
         name: python3-pip
         state: present
-        update_cache: true        
+        update_cache: true
 
+    - name: Update setuptools
+      shell: python3 -m pip install --upgrade pip setuptools
+        
     - name: Create workspace
       file:
         path: /tmp/adopt
