@@ -37,7 +37,8 @@ class HeatTemplateTransformJob:
 
     def run(self, heat_driver, abandon_result, adoption):
         parsed_template = yaml.safe_load(self.heat_template)
-        parsed_template['heat_template_version'] = parsed_template['heat_template_version'].strftime("%Y-%m-%d")
+        if type(parsed_template['heat_template_version']) is not str:
+            parsed_template['heat_template_version'] = parsed_template['heat_template_version'].strftime("%Y-%m-%d")
         adoption['template'] = parsed_template
         for transformation in self.transformations:
             transformation.run(abandon_result, adoption)
