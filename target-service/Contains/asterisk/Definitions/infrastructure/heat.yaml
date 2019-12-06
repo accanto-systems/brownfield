@@ -46,6 +46,14 @@ resources:
             ubuntu:ubuntu
           expire: False
 
+  asterisk_floating_ip:
+    type: OS::Neutron::FloatingIP
+    properties:
+      floating_network: "public"
+      port_id: { get_resource: asterisk_port }
+
 outputs:
   ip: 
     value: { get_attr: [ asterisk_port , fixed_ips, 0, ip_address ] }
+  public_ip: 
+    value: { get_attr: [ asterisk_floating_ip , floating_ip_address ] }

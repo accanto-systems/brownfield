@@ -13,6 +13,9 @@ properties:
   ip: 
     description: ip address of sipp vm
     read_only: true
+  public_ip: 
+    description: public ip address of sipp vm
+    read_only: true
 
 lifecycle:
 - Create
