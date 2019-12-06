@@ -1,0 +1,46 @@
+{
+  "createdAt": "2019-12-06T09:33:40.328Z",
+  "projectId": "$lmctl:/descriptor_name",
+  "lastModifiedAt": "2019-12-06T09:43:45.091Z",
+  "stages": [
+    {
+      "steps": [
+        {
+          "stepDefinitionName": "MetricDefinitions::SpecifyMetricDefinition",
+          "properties": {
+            "timestampField": "time",
+            "metricDefinitionName": "collectd",
+            "valueField": "values",
+            "metricTypeField": "type_instance",
+            "resourceIdField": "host"
+          }
+        },
+        {
+          "stepDefinitionName": "MetricRecording::StartRecordingMultipleMetrics",
+          "properties": {
+            "metricDefinitionName": "collectd",
+            "resourceId": "sipp",
+            "topicName": "resource_metrics",
+            "metrics": "[{\"Metric Id\":\"current calls\",\"Metric Name\":\"Current Calls\"},{\"Metric Id\":\"failed calls\",\"Metric Name\":\"Failed Calls\"},{\"Metric Id\":\"call rate\",\"Metric Name\":\"Call Rate\"},{\"Metric Id\":\"outgoing calls\",\"Metric Name\":\"Outgoing Calls\"}]"
+          }
+        }
+      ],
+      "name": "Start Metric Monitoring"
+    },
+    {
+      "steps": [
+        {
+          "stepDefinitionName": "Utilities::SleepForTime",
+          "properties": {
+            "sleepTime": "2",
+            "timeUnit": "minutes"
+          }
+        }
+      ],
+      "name": "Stage"
+    }
+  ],
+  "assemblyActors": [],
+  "name": "Brownfield Adoption",
+  "description": "Adopt existing VNFs created outside of ALM "
+}

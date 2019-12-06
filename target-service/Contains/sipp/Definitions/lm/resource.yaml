@@ -13,7 +13,8 @@ properties:
   ip: 
     description: ip address of sipp vm
     read_only: true
-
+  instance_name:
+    default: sipp
 lifecycle:
 - Create
 - Install
