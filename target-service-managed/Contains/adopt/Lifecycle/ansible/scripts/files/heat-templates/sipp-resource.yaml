@@ -1,0 +1,61 @@
+heat_template_version: "2018-08-31"
+description: "Base infrastructure for Brownfield Demo"
+
+parameters:
+  network_id:
+    type: string
+    label: Network id
+    description: network id
+    default: voice_net
+  subnet_id:
+    type: string
+    label: subnet id
+    description: subnet id
+    default: voice_subnet
+
+resources:
+  sipp_port: 
+    type: "OS::Neutron::Port"
+    properties: 
+      admin_state_up: true
+      fixed_ips: [{ "subnet": { get_param: subnet_id}}]
+      security_groups: 
+        - default
+      name: sipp-port
+      network: { get_param: network_id }
+  sipp: 
+    type: "OS::Nova::Server"
+    properties: 
+      networks: 
+        - port: { get_resource: sipp_port }
+      name: sipp
+      flavor: m1.small
+      key_name: default
+      image:  sipp
+      config_drive: true
+      user_data_format: RAW
+      user_data: |
+        #cloud-config
+        manage_etc_hosts: true
+        bootcmd: 
+         - [ sysctl, net.ipv4.ip_forward=1 ]
+         - [ sh, -c, echo 'nameserver 8.8.8.8' > /etc/resolv.conf ]
+        ssh_pwauth: True
+        password: ubuntu
+        chpasswd:
+          list: |
+            ubuntu:ubuntu
+          expire: False
+
+
+  sipp_floating_ip:
+    type: OS::Neutron::FloatingIP
+    properties:
+      floating_network: "public"
+      port_id: { get_resource: sipp_port }
+
+outputs:
+  ip: 
+    value: { get_attr: [ sipp_port , fixed_ips, 0, ip_address ] }
+  public_ip: 
+    value: { get_attr: [ sipp_floating_ip , floating_ip_address ] }

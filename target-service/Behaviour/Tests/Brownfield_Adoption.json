@@ -1,27 +1,37 @@
 {
-  "createdAt": "2019-12-06T09:33:40.328Z",
+  "assemblyActors": [],
+  "description": "Adopt existing VNFs created outside of ALM ",
   "projectId": "$lmctl:/descriptor_name",
-  "lastModifiedAt": "2019-12-06T09:43:45.091Z",
+  "lastModifiedAt": "2019-12-06T15:25:00.641Z",
+  "name": "Brownfield Adoption",
+  "createdAt": "2019-12-06T09:33:40.328Z",
   "stages": [
     {
       "steps": [
         {
           "stepDefinitionName": "MetricDefinitions::SpecifyMetricDefinition",
           "properties": {
+            "metricTypeField": "type_instance",
+            "resourceIdField": "host",
             "timestampField": "time",
             "metricDefinitionName": "collectd",
-            "valueField": "values",
-            "metricTypeField": "type_instance",
-            "resourceIdField": "host"
+            "valueField": "values"
           }
         },
         {
           "stepDefinitionName": "MetricRecording::StartRecordingMultipleMetrics",
           "properties": {
-            "metricDefinitionName": "collectd",
             "resourceId": "sipp",
-            "topicName": "resource_metrics",
-            "metrics": "[{\"Metric Id\":\"current calls\",\"Metric Name\":\"Current Calls\"},{\"Metric Id\":\"failed calls\",\"Metric Name\":\"Failed Calls\"},{\"Metric Id\":\"call rate\",\"Metric Name\":\"Call Rate\"},{\"Metric Id\":\"outgoing calls\",\"Metric Name\":\"Outgoing Calls\"}]"
+            "metrics": "[{\"Metric Id\":\"current calls\",\"Metric Name\":\"Current Calls\"},{\"Metric Id\":\"failed calls\",\"Metric Name\":\"Failed Calls\"},{\"Metric Id\":\"call rate\",\"Metric Name\":\"Call Rate\"},{\"Metric Id\":\"outgoing calls\",\"Metric Name\":\"Outgoing Calls\"}]",
+            "metricDefinitionName": "collectd",
+            "topicName": "resource_metrics"
+          }
+        },
+        {
+          "stepDefinitionName": "Utilities::SleepForTime",
+          "properties": {
+            "timeUnit": "seconds",
+            "sleepTime": "30"
           }
         }
       ],
@@ -30,17 +40,30 @@
     {
       "steps": [
         {
-          "stepDefinitionName": "Utilities::SleepForTime",
+          "stepDefinitionName": "IntentEngine::CreateAssemblyWithProps",
           "properties": {
-            "sleepTime": "2",
-            "timeUnit": "minutes"
+            "assemblyName": "target",
+            "initialState": "Active",
+            "assemblyProperties": "[{\"Key\":\"old_stack_id\",\"Value\":\"ef456e50-511c-412d-8bf6-ad01fbe463e3\"}]",
+            "descriptorName": "assembly::target-service::1.0"
           }
         }
       ],
-      "name": "Stage"
+      "name": "Adopt Existing Stack"
+    },
+    {
+      "steps": [
+        {
+          "stepDefinitionName": "MetricRecording::StartRecordingInternalIntegrityMetrics",
+          "properties": {
+            "topicName": "alm__integrity",
+            "resourceName": "asterisk",
+            "metricType": "metric::integrity",
+            "metricName": "h_integrity"
+          }
+        }
+      ],
+      "name": "Monitor Integrity of Asterisk"
     }
-  ],
-  "assemblyActors": [],
-  "name": "Brownfield Adoption",
-  "description": "Adopt existing VNFs created outside of ALM "
+  ]
 }

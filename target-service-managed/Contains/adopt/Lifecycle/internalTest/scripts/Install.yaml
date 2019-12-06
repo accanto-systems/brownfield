@@ -1,0 +1,75 @@
+---
+- name: Install
+  hosts: all
+  gather_facts: False
+  vars_files:
+    - variables.yaml
+
+  tasks: 
+    - name: Install python3
+      apt:
+        name: python3
+        state: present
+
+    - name: Install python3-pip
+      apt:
+        name: python3-pip
+        state: present
+
+    - name: Create workspace
+      file:
+        path: /tmp/adopt
+        state: directory
+        mode: '0755'
+
+ #   - name: Copy stack transformer
+  #    copy:
+   #     src: files/stacktransformer/
+    #    dest: /tmp/adopt
+
+  #  - name: Install stack transformer
+  #    shell: python3 -m pip install /tmp/adopt --user
+
+    - name: Template deployment location
+      template:
+        src: files/deployment-location.yaml
+        dest: /tmp/adopt/deployment-location.yaml
+        mode: '0755'
+    
+    - name: Copy Heat template (A)
+      copy: 
+        src: files/heat-templates/splitA.yml
+        dest: /tmp/adopt/splitForA.yml
+        mode: '0755'
+
+    - name: Copy Heat template (B)
+      copy: 
+        src: files/heat-templates/splitB.yml
+        dest: /tmp/adopt/splitForB.yml
+        mode: '0755'
+
+
+    - name: Copy transform file
+      copy:
+        src: files/transform.yaml
+        dest: /tmp/adopt/transform.yaml
+        mode: '0755'
+    
+    - name: Run transformer
+      shell: python3 /tmp/adopt/run.py {{ properties['old_stack_id'] }} /tmp/adopt/transform.yaml /tmp/adopt/deployment-location.yaml
+      register: transform_output
+
+    - set_fact:
+        stack_ids: "{{ transform_output.stdout | from_yaml }}"
+
+    - debug:
+        msg: "{{stack_ids}}"
+
+    - name: Return stack_ids as outputs
+      set_fact:
+        output__stack_for_a: "{{stack_ids['stackForA']}}"
+        output__stack_for_b: "{{stack_ids['stackForB']}}"
+
+    - name: Echo
+      debug:
+        msg: "{{ output__stack_for_a }}, {{ output__stack_for_b }}"

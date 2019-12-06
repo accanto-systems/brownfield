@@ -26,4 +26,4 @@
  
   - name: set the stack_id to null
     set_fact: 
-      output__stack_id: ""
+      output__stack_id: "0"

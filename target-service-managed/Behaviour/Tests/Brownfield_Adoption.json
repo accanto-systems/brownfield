@@ -1,0 +1,67 @@
+{
+  "description": "Adopt existing VNFs created outside of ALM ",
+  "projectId": "$lmctl:/descriptor_name",
+  "assemblyActors": [],
+  "name": "Brownfield Adoption",
+  "createdAt": "2019-12-06T14:28:17.434Z",
+  "lastModifiedAt": "2019-12-06T14:28:17.434Z",
+  "stages": [
+    {
+      "name": "Start Metric Monitoring",
+      "steps": [
+        {
+          "properties": {
+            "metricDefinitionName": "collectd",
+            "valueField": "values",
+            "metricTypeField": "type_instance",
+            "resourceIdField": "host",
+            "timestampField": "time"
+          },
+          "stepDefinitionName": "MetricDefinitions::SpecifyMetricDefinition"
+        },
+        {
+          "properties": {
+            "resourceId": "sipp",
+            "metricDefinitionName": "collectd",
+            "metrics": "[{\"Metric Id\":\"current calls\",\"Metric Name\":\"Current Calls\"},{\"Metric Id\":\"failed calls\",\"Metric Name\":\"Failed Calls\"},{\"Metric Id\":\"call rate\",\"Metric Name\":\"Call Rate\"},{\"Metric Id\":\"outgoing calls\",\"Metric Name\":\"Outgoing Calls\"}]",
+            "topicName": "resource_metrics"
+          },
+          "stepDefinitionName": "MetricRecording::StartRecordingMultipleMetrics"
+        },
+        {
+          "properties": {
+            "sleepTime": "30",
+            "timeUnit": "seconds"
+          },
+          "stepDefinitionName": "Utilities::SleepForTime"
+        }
+      ]
+    },
+    {
+      "name": "Adopt Existing Stack",
+      "steps": [
+        {
+          "properties": {
+            "assemblyProperties": "[{\"Key\":\"old_stack_id\",\"Value\":\"ef456e50-511c-412d-8bf6-ad01fbe463e3\"}]",
+            "descriptorName": "assembly::target-service::1.0",
+            "initialState": "Active",
+            "assemblyName": "target"
+          },
+          "stepDefinitionName": "IntentEngine::CreateAssemblyWithProps"
+        }
+      ]
+    },
+    {
+      "name": "Monitor Integrity of Asterisk",
+      "steps": []
+    },
+    {
+      "name": "Remove Adoption Infrastructure",
+      "steps": []
+    },
+    {
+      "name": "Stage",
+      "steps": []
+    }
+  ]
+}
