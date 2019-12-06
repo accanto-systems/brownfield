@@ -9,6 +9,8 @@ composition:
         value: brent
       ip: 
         value: ${shared.asterisk_ip}
+      public_ip: 
+        value: ${shared.asterisk_public_ip}
     type: $lmctl:/contains:/asterisk:/descriptor_name
   sipp:
     properties:
@@ -18,6 +20,8 @@ composition:
         value: brent
       ip: 
         value: ${shared.sipp_ip}
+      public_ip: 
+        value: ${shared.sipp_public_ip}
       target_ip: 
         value: ${shared.asterisk_ip}
     type: $lmctl:/contains:/sipp:/descriptor_name

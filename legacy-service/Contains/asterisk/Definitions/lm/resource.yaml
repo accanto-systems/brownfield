@@ -2,6 +2,8 @@ description: descriptor for asterisk
 properties:
   ip:
     description: ip address of the asterisk VM
+  public_ip:
+    description: public ip address of the asterisk VM
 lifecycle:
 - Install
 - Configure

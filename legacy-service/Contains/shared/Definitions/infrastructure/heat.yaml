@@ -132,6 +132,10 @@ resources:
 
 outputs:
   asterisk_ip: 
-    value: { get_attr: [ asterisk_floating_ip , floating_ip_address ] }
+    value: { get_attr: [ asterisk_port , fixed_ips, 0, ip_address ] }
   sipp_ip: 
+    value: { get_attr: [ sipp_port , fixed_ips, 0, ip_address ] }
+  asterisk_public_ip: 
+    value: { get_attr: [ asterisk_floating_ip , floating_ip_address ] }
+  sipp_public_ip: 
     value: { get_attr: [ sipp_floating_ip , floating_ip_address ] }
