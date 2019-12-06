@@ -2,9 +2,14 @@ description: descriptor for asterisk
 properties:
   ip:
     description: ip address of the asterisk VM
+  instance_name: 
+    default: asterisk
+  instanceid:
+    value: ${instance.id}
+
 lifecycle:
 - Install
 - Configure
 - Start
 - Stop
-- Uninstall
+

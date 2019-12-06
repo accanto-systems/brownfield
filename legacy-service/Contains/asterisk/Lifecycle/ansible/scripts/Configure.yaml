@@ -7,7 +7,6 @@
 
   vars: 
     bindIP: "{{ properties.voice_ip_address }}"
-    subnet: "{{ properties.voice_cidr.split('/')[0] }}"
   tasks:
   - name: copy
     copy:
