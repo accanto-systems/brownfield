@@ -3,7 +3,13 @@ properties:
   asterisk_ip:
     description: asterisk ip address
     read_only: True
+  asterisk_public_ip:
+    description: asterisk ip address
+    read_only: True
   sipp_ip:
+    description: sipp ip address  
+    read_only: True
+  sipp_public_ip:
     description: sipp ip address  
     read_only: True
 lifecycle:

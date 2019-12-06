@@ -6,6 +6,8 @@ properties:
     default: asterisk
   instanceid:
     value: ${instance.id}
+  public_ip:
+    description: public ip address of the asterisk VM
 
 lifecycle:
 - Install
