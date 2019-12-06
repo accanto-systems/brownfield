@@ -27,6 +27,12 @@ resources:
       external_gateway_info:
         network: "public"
 
+  adopt_routerinterface: 
+    type: "OS::Neutron::RouterInterface"
+    properties: 
+      router: { get_resource: adopt_router }
+      subnet: { get_resource: adopt_subnet }
+
   adopt_port: 
     type: "OS::Neutron::Port"
     properties: 
