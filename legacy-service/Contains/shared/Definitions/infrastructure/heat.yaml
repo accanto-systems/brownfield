@@ -46,6 +46,16 @@ resources:
       router: { get_resource: voip_router }
       subnet: { get_resource: voip_subnet }
 
+  voip_port: 
+    type: "OS::Neutron::Port"
+    properties: 
+      admin_state_up: true
+      fixed_ips: [{ "subnet": { get_resource: voip_subnet}}]
+      security_groups: 
+        - default
+      name: voip-port
+      network: { get_resource: voip_net }
+
   voip: 
     type: "OS::Nova::Server"
     properties: 
