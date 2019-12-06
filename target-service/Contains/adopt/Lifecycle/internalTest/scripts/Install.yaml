@@ -2,6 +2,8 @@
 - name: Install
   hosts: all
   gather_facts: False
+  vars_files:
+    - variables.yaml
 
   tasks: 
     - name: Install python3
@@ -20,13 +22,13 @@
         state: directory
         mode: '0755'
 
-    - name: Copy stack transformer
-      copy:
-        src: files/stacktransformer/
-        dest: /tmp/adopt
+ #   - name: Copy stack transformer
+  #    copy:
+   #     src: files/stacktransformer/
+    #    dest: /tmp/adopt
 
-    - name: Install stack transformer
-      shell: python3 -m pip install /tmp/adopt
+  #  - name: Install stack transformer
+  #    shell: python3 -m pip install /tmp/adopt --user
 
     - name: Template deployment location
       template:
@@ -34,23 +36,18 @@
         dest: /tmp/adopt/deployment-location.yaml
         mode: '0755'
     
-    - name: Copy Heat template (asterisk)
+    - name: Copy Heat template (A)
       copy: 
-        src: files/heat-templates/asterisk-resource.yaml
-        dest: /tmp/adopt/asterisk-resource.yaml
+        src: files/heat-templates/splitA.yml
+        dest: /tmp/adopt/splitForA.yml
         mode: '0755'
 
-    - name: Copy Heat template (shared)
+    - name: Copy Heat template (B)
       copy: 
-        src: files/heat-templates/shared-resource.yaml
-        dest: /tmp/adopt/shared-resource.yaml
+        src: files/heat-templates/splitB.yml
+        dest: /tmp/adopt/splitForB.yml
         mode: '0755'
 
-    - name: Copy Heat template (sipp)
-      copy: 
-        src: files/heat-templates/sipp-resource.yaml
-        dest: /tmp/adopt/sipp-resource.yaml
-        mode: '0755'
 
     - name: Copy transform file
       copy:
@@ -70,6 +67,9 @@
 
     - name: Return stack_ids as outputs
       set_fact:
-        output__asterisk_stack_id: "{{stack_ids['asterisk']}}"
-        output__sipp_stack_id: "{{stack_ids['sipp']}}"
-        output__shared_stack_id: "{{stack_ids['shared']}}"
+        output__stack_for_a: "{{stack_ids['stackForA']}}"
+        output__stack_for_b: "{{stack_ids['stackForB']}}"
+
+    - name: Echo
+      debug:
+        msg: "{{ output__stack_for_a }}, {{ output__stack_for_b }}"

@@ -1,2 +1,4 @@
 
 **/_lmctl
+env/
+__pycache__/
