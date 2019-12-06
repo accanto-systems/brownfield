@@ -1,34 +1,28 @@
 {
-  "name": "Brownfield Adoption",
+  "projectId": "$lmctl:/descriptor_name",
+  "assemblyActors": [],
   "stages": [
     {
       "name": "Start Metric Monitoring",
       "steps": [
         {
+          "stepDefinitionName": "MetricDefinitions::SpecifyMetricDefinition",
           "properties": {
-            "metricDefinitionName": "collectd",
+            "timestampField": "time",
             "metricTypeField": "type_instance",
             "valueField": "values",
-            "resourceIdField": "host",
-            "timestampField": "time"
-          },
-          "stepDefinitionName": "MetricDefinitions::SpecifyMetricDefinition"
+            "metricDefinitionName": "collectd",
+            "resourceIdField": "host"
+          }
         },
         {
+          "stepDefinitionName": "MetricRecording::StartRecordingMultipleMetrics",
           "properties": {
-            "metricDefinitionName": "collectd",
+            "resourceId": "sipp",
             "metrics": "[{\"Metric Id\":\"current calls\",\"Metric Name\":\"Current Calls\"},{\"Metric Id\":\"failed calls\",\"Metric Name\":\"Failed Calls\"},{\"Metric Id\":\"call rate\",\"Metric Name\":\"Call Rate\"},{\"Metric Id\":\"outgoing calls\",\"Metric Name\":\"Outgoing Calls\"}]",
             "topicName": "resource_metrics",
-            "resourceId": "sipp"
-          },
-          "stepDefinitionName": "MetricRecording::StartRecordingMultipleMetrics"
-        },
-        {
-          "properties": {
-            "timeUnit": "seconds",
-            "sleepTime": "30"
-          },
-          "stepDefinitionName": "Utilities::SleepForTime"
+            "metricDefinitionName": "collectd"
+          }
         }
       ]
     },
@@ -36,27 +30,35 @@
       "name": "Adopt Existing Stack",
       "steps": [
         {
+          "stepDefinitionName": "IntentEngine::CreateAssemblyWithProps",
           "properties": {
-            "assemblyProperties": "[{\"Key\":\"old_stack_id\",\"Value\":\"4d29f12c-64e8-4541-b84c-1b17cbab04bc\"}]",
-            "initialState": "Active",
             "descriptorName": "assembly::target-service::1.0",
-            "assemblyName": "target"
-          },
-          "stepDefinitionName": "IntentEngine::CreateAssemblyWithProps"
+            "assemblyName": "target",
+            "initialState": "Active",
+            "assemblyProperties": "[{\"Key\":\"old_stack_id\",\"Value\":\"5d9bb105-b69d-4b9a-a82f-a5c9d323be7f\"}]"
+          }
         },
         {
+          "stepDefinitionName": "MetricRecording::StartRecordingInternalIntegrityMetrics",
+          "properties": {
+            "metricType": "integrity",
+            "resourceName": "target__asterisk",
+            "topicName": "alm__integrity",
+            "metricName": "h_integrity"
+          }
+        },
+        {
+          "stepDefinitionName": "Utilities::SleepForTime",
           "properties": {
             "timeUnit": "minutes",
-            "sleepTime": "5"
-          },
-          "stepDefinitionName": "Utilities::SleepForTime"
+            "sleepTime": "15"
+          }
         }
       ]
     }
   ],
-  "lastModifiedAt": "2019-12-06T16:27:13.059Z",
-  "assemblyActors": [],
-  "projectId": "$lmctl:/descriptor_name",
   "description": "Adopt existing VNFs created outside of ALM ",
+  "name": "Brownfield Adoption",
+  "lastModifiedAt": "2019-12-06T17:57:03.321Z",
   "createdAt": "2019-12-06T09:33:40.328Z"
 }

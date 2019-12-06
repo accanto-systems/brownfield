@@ -14,7 +14,7 @@ def initer():
   collectd.info('initing stuff')
 
 def get_metric_key():
-  metric_key = "{{properties.instanceid}}"
+  metric_key = "{{system_properties.metricKey}}"
   
   collectd.info(metric_key)
   if metric_key == "no params file found":
