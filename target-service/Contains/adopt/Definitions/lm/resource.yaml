@@ -5,18 +5,13 @@ properties:
   old_stack_id:
     required: true
   host:
-    required: true
+    read_only: true
   asterisk_stack_id:
     read_only: true
   sipp_stack_id:
     read_only: true
   shared_stack_id:
     read_only: true
-  network_id:
-    description: network id
-    required: true
-  subnet_id:
-    description: subnet id
-    required: true
+
 lifecycle:
 - Install

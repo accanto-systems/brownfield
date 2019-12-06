@@ -13,10 +13,6 @@ composition:
         value: brent
       old_stack_id:
         value: ${old_stack_id}
-      network_id:
-        value: ${shared.network_id}
-      subnet_id:
-        value: ${shared.subnet_id}
     type: $lmctl:/contains:/adopt:/descriptor_name
   asterisk:
     properties:

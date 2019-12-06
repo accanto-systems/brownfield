@@ -1,26 +1,41 @@
 heat_template_version: "2018-08-31"
 description: "Base infrastructure for Brownfield Demo"
 
-parameters:
-  network_id:
-    type: string
-    label: Network id
-    description: network id
-  subnet_id:
-    type: string
-    label: subnet id
-    description: subnet id
-
 resources:
+
+  adopt_net: 
+    type: "OS::Neutron::Net"
+    properties: 
+      admin_state_up: true
+      name: adopt_net
+
+  adopt_subnet: 
+    type: "OS::Neutron::Subnet"
+    properties: 
+      network: { get_resource: adopt_net }
+      name: adopt_subnet
+      enable_dhcp: true
+      dns_nameservers:
+        - 8.8.8.8
+      cidr: "192.168.100.0/24"
+
+  adopt_router:
+    type: "OS::Neutron::Router"
+    properties: 
+      admin_state_up: true
+      name: adopt_router
+      external_gateway_info:
+        network: "public"
+
   adopt_port: 
     type: "OS::Neutron::Port"
     properties: 
       admin_state_up: true
-      fixed_ips: [{ "subnet": { get_param: subnet_id}}]
+      fixed_ips: [{ "subnet": { get_resource: adopt_subnet}}]
       security_groups: 
         - default
       name: adopt-port
-      network: { get_param: network_id }
+      network: { get_resource: adopt_net }
 
   adopt: 
     type: "OS::Nova::Server"
