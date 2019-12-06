@@ -1,0 +1,57 @@
+heat_template_version: "2018-08-31"
+description: "Base infrastructure for Brownfield Demo"
+
+parameters:
+  network_id:
+    type: string
+    label: Network id
+    description: network id
+  subnet_id:
+    type: string
+    label: subnet id
+    description: subnet id
+
+resources:
+  adopt_port: 
+    type: "OS::Neutron::Port"
+    properties: 
+      admin_state_up: true
+      fixed_ips: [{ "subnet": { get_param: subnet_id}}]
+      security_groups: 
+        - default
+      name: adopt-port
+      network: { get_param: network_id }
+
+  adopt: 
+    type: "OS::Nova::Server"
+    properties: 
+      networks: 
+        - port: { get_resource: adopt_port }
+      name: adopt
+      flavor: m1.small
+      key_name: default
+      image:  adopt
+      config_drive: true
+      user_data_format: RAW
+      user_data: |
+        #cloud-config
+        manage_etc_hosts: true
+        bootcmd: 
+         - [ sysctl, net.ipv4.ip_forward=1 ]
+         - [ sh, -c, echo 'nameserver 8.8.8.8' > /etc/resolv.conf ]
+        ssh_pwauth: True
+        password: ubuntu
+        chpasswd:
+          list: |
+            ubuntu:ubuntu
+          expire: False
+
+  adopt_floating_ip:
+    type: OS::Neutron::FloatingIP
+    properties:
+      floating_network: "public"
+      port_id: { get_resource: adopt_port }
+
+outputs:
+  host: 
+    value: { get_attr: [ adopt_floating_ip , floating_ip_address ] }

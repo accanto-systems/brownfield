@@ -16,11 +16,11 @@ resources:
     type: "OS::Neutron::Port"
     properties: 
       admin_state_up: true
-      fixed_ips: [{ "subnet": { get_resource: voip_subnet}}]
+      fixed_ips: [{ "subnet": { get_param: subnet_id}}]
       security_groups: 
-        - { get_resource: voip_security_group }
+        - default
       name: asterisk-port
-      network: { get_resource: voip_net }
+      network: { get_param: network_id }
 
   asterisk: 
     type: "OS::Nova::Server"
@@ -46,6 +46,14 @@ resources:
             ubuntu:ubuntu
           expire: False
 
+  asterisk_floating_ip:
+    type: OS::Neutron::FloatingIP
+    properties:
+      floating_network: "public"
+      port_id: { get_resource: asterisk_port }
+
 outputs:
   ip: 
     value: { get_attr: [ asterisk_port , fixed_ips, 0, ip_address ] }
+  public_ip: 
+    value: { get_attr: [ asterisk_floating_ip , floating_ip_address ] }

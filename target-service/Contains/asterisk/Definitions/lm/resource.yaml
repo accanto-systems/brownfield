@@ -17,7 +17,7 @@ properties:
   instance_name: 
     value: asterisk
   instanceid: 
-    value: ${instance_id}
+    value: ${instance.id}
 
 lifecycle:
 - Create
