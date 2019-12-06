@@ -3,6 +3,7 @@ description: descriptor for infrastructure
 properties:
   host:
     description: host to run Install playbook on
+    read_only: true
   stack_id:
     description: stack id to adopt
     volatile: true

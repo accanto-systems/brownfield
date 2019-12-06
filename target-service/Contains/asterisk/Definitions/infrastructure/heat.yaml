@@ -16,11 +16,11 @@ resources:
     type: "OS::Neutron::Port"
     properties: 
       admin_state_up: true
-      fixed_ips: [{ "subnet": { get_resource: voip_subnet}}]
+      fixed_ips: [{ "subnet": { get_param: subnet_id}}]
       security_groups: 
-        - { get_resource: voip_security_group }
+        - default
       name: asterisk-port
-      network: { get_resource: voip_net }
+      network: { get_param: network_id }
 
   asterisk: 
     type: "OS::Nova::Server"

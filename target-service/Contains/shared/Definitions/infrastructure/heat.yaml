@@ -46,6 +46,46 @@ resources:
       router: { get_resource: voip_router }
       subnet: { get_resource: voip_subnet }
 
+  voip_port: 
+    type: "OS::Neutron::Port"
+    properties: 
+      admin_state_up: true
+      fixed_ips: [{ "subnet": { get_resource: voip_subnet}}]
+      security_groups: 
+        - default
+      name: voip-port
+      network: { get_resource: voip_net }
+
+  voip: 
+    type: "OS::Nova::Server"
+    properties: 
+      networks: 
+        - port: { get_resource: voip_port }
+      name: voip
+      flavor: m1.small
+      key_name: default
+      image:  bionic-server-cloudimg-amd64
+      config_drive: true
+      user_data_format: RAW
+      user_data: |
+        #cloud-config
+        manage_etc_hosts: true
+        bootcmd: 
+         - [ sysctl, net.ipv4.ip_forward=1 ]
+         - [ sh, -c, echo 'nameserver 8.8.8.8' > /etc/resolv.conf ]
+        ssh_pwauth: True
+        password: ubuntu
+        chpasswd:
+          list: |
+            ubuntu:ubuntu
+          expire: False
+
+  voip_floating_ip:
+    type: OS::Neutron::FloatingIP
+    properties:
+      floating_network: "public"
+      port_id: { get_resource: voip_port }
+
 outputs:
   network_id: 
     value: { get_resource: voip_net }
@@ -53,3 +93,5 @@ outputs:
     value: { get_resource: voip_subnet }
   security_group_id: 
     value: { get_resource: voip_security_group }
+  host:
+    value: { get_attr: [ voip_floating_ip , floating_ip_address ] }
