@@ -2,17 +2,23 @@
 - name: Install
   hosts: all
   gather_facts: False
-
+  become: true
+  
   tasks: 
-    - name: Install python3
-      apt:
-        name: python3
-        state: present
+ 
+    - name: Wait for update to finish
+      shell: |
+        systemctl disable --now apt-daily.timer
+        systemctl disable --now apt-daily-upgrade.timer
+        systemctl daemon-reload
+        systemd-run --property="After=apt-daily.service apt-daily-upgrade.service" --wait /bin/true
+        apt-get -y purge unattended-upgrades 
 
     - name: Install python3-pip
       apt:
         name: python3-pip
         state: present
+        update_cache: true        
 
     - name: Create workspace
       file:
