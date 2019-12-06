@@ -1,3 +1,4 @@
-lmctl project $1 $2 --project legacy-service
-lmctl project $1 $2 --project target-service
-lmctl project $1 $2 --project target-service-managed
+
+cd legacy-service; lmctl project $1 $2 ; cd ..
+cd target-service; lmctl project $1 $2 ; cd ..
+cd target-service-managed; lmctl project $1 $2 ; cd ..
