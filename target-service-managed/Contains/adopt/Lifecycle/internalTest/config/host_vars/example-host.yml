@@ -1,4 +1,0 @@
----
-ansible_host: 10.220.217.195
-ansible_ssh_user: dvs
-ansible_ssh_pass: dvs!

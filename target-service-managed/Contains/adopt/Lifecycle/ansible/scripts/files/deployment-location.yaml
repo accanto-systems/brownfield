@@ -1,3 +1,0 @@
-name: {{ system_properties.deploymentLocation }}
-properties: 
-{{ dl_properties | to_nice_yaml | indent(width=2, first=True) }}

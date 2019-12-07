@@ -1,7 +1,0 @@
-- stack_name: asterisk
-  heat_template: /tmp/adopt/asterisk-resource.yaml
-- stack_name: sipp
-  heat_template: /tmp/adopt/sipp-resource.yaml
-- stack_name: shared
-  heat_template: /tmp/adopt/shared-resource.yaml
-  

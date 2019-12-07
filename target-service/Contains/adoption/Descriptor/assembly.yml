@@ -1,46 +1,53 @@
-description: descriptor for adopting target service
+description: descriptor for target service
+
+properties:
+  old_stack_id:
+    description: legacy stack id to adopt
 
 composition:
-  asterisk:
+  adopt:
     properties:
-      stack_id:
-        value: '0'
-      network_id:
-        value: ${shared.network_id}
-      subnet_id:
-        value: ${shared.subnet_id}
       deploymentLocation:
         value: core
       resourceManager:
         value: brent
+      old_stack_id:
+        value: ${old_stack_id}
+    type: $lmctl:/contains:/adopt:/descriptor_name
+  asterisk:
+    properties:
+      deploymentLocation:
+        value: core
+      resourceManager:
+        value: brent
+      stack_id:
+        value: ${adopt.asterisk_stack_id}
+      network_id:
+        value: ${shared.network_id}
+      subnet_id:
+        value: ${shared.subnet_id}
     type: $lmctl:/contains:/asterisk:/descriptor_name
   sipp:
     properties:
+      deploymentLocation:
+        value: core
+      resourceManager:
+        value: brent
       stack_id:
-        value: '0'
+        value: ${adopt.sipp_stack_id}
       target_ip:
         value: ${asterisk.ip}
       network_id:
         value: ${shared.network_id}
       subnet_id:
         value: ${shared.subnet_id}
-      deploymentLocation:
-        value: core
-      resourceManager:
-        value: brent
     type: $lmctl:/contains:/sipp:/descriptor_name
   shared:
     properties:
-      stack_id:
-        value: '0'
       deploymentLocation:
         value: core
       resourceManager:
         value: brent
+      stack_id:
+        value: ${adopt.shared_stack_id}
     type: $lmctl:/contains:/shared:/descriptor_name
-
-
-
-
-
-

@@ -1,5 +1,0 @@
-- stack_name: stackForA
-  heat_template: /tmp/adopt/splitForA.yml
-- stack_name: stackForB
-  heat_template: /tmp/adopt/splitForB.yml
-  

@@ -1,13 +1,19 @@
 {
+  "description": "Adopt existing VNFs created outside of ALM ",
+  "projectId": "$lmctl:/descriptor_name",
+  "assemblyActors": [],
+  "name": "Brownfield Adoption",
+  "createdAt": "2019-12-06T09:33:40.328Z",
   "stages": [
     {
+      "name": "Start Metric Monitoring",
       "steps": [
         {
           "properties": {
             "metricDefinitionName": "collectd",
+            "timestampField": "time",
             "valueField": "values",
             "resourceIdField": "host",
-            "timestampField": "time",
             "metricTypeField": "type_instance"
           },
           "stepDefinitionName": "MetricDefinitions::SpecifyMetricDefinition"
@@ -21,28 +27,38 @@
           },
           "stepDefinitionName": "MetricRecording::StartRecordingMultipleMetrics"
         }
-      ],
-      "name": "Start Metric Monitoring"
+      ]
     },
     {
+      "name": "Adopt Existing Stack",
       "steps": [
         {
           "properties": {
-            "assemblyName": "target",
-            "descriptorName": "assembly::target-service::1.0",
             "initialState": "Active",
-            "assemblyProperties": "[{\"Key\":\"old_stack_id\",\"Value\":\"5d9bb105-b69d-4b9a-a82f-a5c9d323be7f\"}]"
+            "assemblyName": "target",
+            "assemblyProperties": "[{\"Key\":\"old_stack_id\",\"Value\":\"6e48946d-7fb0-49d6-a0f3-9c6091d3d1c3\"}]",
+            "descriptorName": "assembly::adoption-target-service::1.0"
           },
           "stepDefinitionName": "IntentEngine::CreateAssemblyWithProps"
         },
         {
           "properties": {
-            "metricType": "integrity",
-            "metricName": "h_integrity",
-            "resourceName": "target__asterisk",
-            "topicName": "alm__integrity"
+            "sleepTime": "15",
+            "timeUnit": "seconds"
           },
-          "stepDefinitionName": "MetricRecording::StartRecordingInternalIntegrityMetrics"
+          "stepDefinitionName": "Utilities::SleepForTime"
+        }
+      ]
+    },
+    {
+      "name": "Remove Adoption Infrastructure",
+      "steps": [
+        {
+          "properties": {
+            "assemblyName": "target",
+            "descriptorName": "assembly::target-service::1.0"
+          },
+          "stepDefinitionName": "IntentEngine::UpgradeAssemblyDescriptor"
         },
         {
           "properties": {
@@ -51,14 +67,8 @@
           },
           "stepDefinitionName": "Utilities::SleepForTime"
         }
-      ],
-      "name": "Adopt Existing Stack"
+      ]
     }
   ],
-  "description": "Adopt existing VNFs created outside of ALM ",
-  "projectId": "$lmctl:/descriptor_name",
-  "assemblyActors": [],
-  "lastModifiedAt": "2019-12-06T17:57:03.321Z",
-  "name": "Brownfield Adoption",
-  "createdAt": "2019-12-06T09:33:40.328Z"
+  "lastModifiedAt": "2019-12-07T09:48:27.038Z"
 }
