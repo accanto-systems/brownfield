@@ -1,0 +1,5 @@
+- name: Configure sipp
+  import_tasks: Configure.yaml
+
+- name: Start sipp
+  import_tasks: Start.yaml

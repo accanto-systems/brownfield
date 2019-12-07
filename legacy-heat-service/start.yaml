@@ -1,0 +1,15 @@
+--- 
+
+- hosts: asterisk-vm
+  gather_facts: no
+  become: yes
+  tasks:
+    - import_role:
+        name: asterisk
+
+- hosts: sipp-vm
+  gather_facts: no
+  become: yes
+  tasks:
+    - import_role:
+        name: sipp

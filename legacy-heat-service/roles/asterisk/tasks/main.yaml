@@ -1,0 +1,5 @@
+- name: Configure asterisk
+  import_tasks: Configure.yaml
+
+- name: Start asterisk
+  import_tasks: Start.yaml
