@@ -37,6 +37,22 @@ lm_theme_name: bluerinse
 
 ### Run the AIO installation
 
+### Dependencies
+
+To install AOI on your machine:
+
+```
+sudo apt-get install sshpass
+sudo apt-get install python-apt
+```
+
+If you are installing on an existing Ubuntu box:
+
+```
+sudo service apparmor start
+sudo apt-get purge apache2
+```
+
 Create your AIO by running the following command:
 
 ```
