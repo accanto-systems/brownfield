@@ -148,10 +148,13 @@ Once AIO is up and running, log onto LM at https://192.168.10.5:8082 and create 
 Add a location called "core" with resource manager "brent" and infrastructure type "Openstack" and provide the following properties
 
 ```
-os_auth_url: "http://10.220.218.5:5000/v3"
-os_projectname: vnfs
-os_username: admin
-os_password: password
+os_auth_project_name: admin
+os_auth_project_domain_name: default
+os_auth_password: password
+os_auth_username: admin
+os_auth_user_domain_name: default
+os_auth_api: v3
+os_api_url: http://192.168.10.10:5000
 almip: AIO_FLOATING_IP
 ```
 

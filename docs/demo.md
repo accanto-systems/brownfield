@@ -26,7 +26,6 @@ Activate Network Service
 * Add the HEAT templates to adopt in the Adoption Job Resource
 * In designer model the target network service
 * In designer model the adoption version of the network service
-* In designer design a behaviour test to run the network service takeover
 
 ## Takeover the network service
 

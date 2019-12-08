@@ -6,12 +6,12 @@ parameters:
     type: string
     label: Network id
     description: network id
-    default: voice_net
+    default: voip_net
   subnet_id:
     type: string
     label: subnet id
     description: subnet id
-    default: voice_subnet
+    default: voip_subnet
 
 resources:
   asterisk_port: 
