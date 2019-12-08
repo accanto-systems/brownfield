@@ -5,26 +5,26 @@ ansible_connection="ssh"
 ansible_user="ubuntu" 
 ansible_ssh_pass="ubuntu" 
 ansible_ssh_common_args='-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'
-almip=10.220.219.72
+almip=10.220.219.129
 
 [service:children]
 sipp
 asterisk
 
 [sipp]
-sipp-vm ansible_host=10.220.219.81
+sipp-vm ansible_host=10.220.219.74
 
 [sipp:vars]
-ip=192.168.100.71
-public_ip=10.220.219.81
-target_ip=192.168.100.30
+ip=192.168.100.28
+public_ip=10.220.219.74
+target_ip=192.168.100.65
 instance_name="sipp"
 
 [asterisk]
-asterisk-vm ansible_host=10.220.219.54
+asterisk-vm ansible_host=10.220.219.214
 
 [asterisk:vars]
-ip=192.168.100.30
-public_ip=10.220.219.54
+ip=192.168.100.65
+public_ip=10.220.219.214
 instance_name="asterisk"
 instanceid="1"

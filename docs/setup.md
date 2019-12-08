@@ -15,7 +15,7 @@ lm_docker_package: ../lm-artifacts/lm-docker-source-2.1.0-XXXX-dist.tgz
 
 ### Set the RM polling timer to 5 secs
 
-Add the fillowing daytona block to the **lmConfigImport** section of the anible/lm-helm-values.yml file
+Add the fillowing daytona block to the **lmConfigImport** section of the ansible/lm-helm-values.yml file
 
 ```
 configurator:
@@ -39,6 +39,11 @@ lm_theme_name: bluerinse
 
 ### Dependencies
 
+```
+sudo apt-get install python3-pip
+pip3 install ansible
+```
+
 To install AOI on your machine:
 
 ```
@@ -53,10 +58,13 @@ sudo service apparmor start
 sudo apt-get purge apache2
 ```
 
+Update the inventory as per instructions 
+
 Create your AIO by running the following command:
 
 ```
-ansible-playbook ...
+ansible-galaxy install -r ansible/requirements.yml -p ansible/roles
+ansible-playbook -i ansible/inventories/allinone/inventory ansible/start-aio.yml
 ```
 
 ## Setup LMCTL
@@ -97,6 +105,10 @@ export LMCONFIG=~/lmconfig.yaml
 ## Install 2.1 Drivers
 
 Log into the AIO box @ AIO_FLOATING_IP. Username/Password is ubuntu/ubuntu and run the following commands to attach required Resource Manager drivers. 
+
+```
+helm init
+```
 
 ### Ansible lifecycle driver
 
@@ -142,6 +154,9 @@ os_username: admin
 os_password: password
 almip: AIO_FLOATING_IP
 ```
+
+
+https://10.220.219.129/ui
 
 ## Add kafka viewer to AIO
 

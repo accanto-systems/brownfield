@@ -1,5 +1,47 @@
-- name: Configure asterisk
-  import_tasks: Configure.yaml
+- name: copy extensions
+  template:
+    src: extensions.conf
+    dest: /etc/asterisk/extensions.conf
+    owner: root
+    group: root
+    mode: 0644
 
-- name: Start asterisk
-  import_tasks: Start.yaml
+- name: write the sip config file
+  template:
+    src: sip.conf.template
+    dest: /etc/asterisk/sip.conf
+
+- name: create pythonmonitor
+  file: 
+    path: /pythonmonitor
+    state: directory
+
+- name: copy monitor.py
+  template:
+    src: pythonmonitor/monitor.py
+    dest: /pythonmonitor/
+
+- name: create /etc/collectd
+  file: 
+    path: /etc/collectd
+    state: directory
+
+- name: copy collectd.conf
+  template:
+    src: collectd.conf
+    dest: /etc/collectd/collectd.conf
+    
+- name: add kafka.lm to hosts
+  shell: "echo {{ almip }} kafka.lm >> /etc/hosts"
+
+- name: Check if Asterisk is running
+  shell: "ps aux"
+  register: asterisk_status
+
+- name: start asterisk
+  command: "nohup asterisk < /dev/null > /dev/null 2>&1 & sleep 1"
+  when: asterisk_status.stdout.find('asterisk') == -1
+
+- name: Start Collectd for metric publication
+  become: yes
+  raw: "nohup collectd -C /etc/collectd/collectd.conf < /dev/null > /dev/null 2>&1"

@@ -1,5 +1,39 @@
-- name: Configure sipp
-  import_tasks: Configure.yaml
+- name: copy myuac.xml
+  template:
+    src: myuac.xml
+    dest: /
 
-- name: Start sipp
-  import_tasks: Start.yaml
+- name: create pythonmonitor
+  file: 
+    path: /pythonmonitor
+    state: directory
+
+- name: copy monitor.py
+  template:
+    src: monitor.py
+    dest: /pythonmonitor
+
+- name: create /etc/collectd
+  file: 
+    path: /etc/collectd
+    state: directory
+
+- name: copy collectd.conf
+  template:
+    src: collectd.conf
+    dest: /etc/collectd/
+
+- name: add kafka.lm to hosts
+  become: yes
+  shell: "echo {{ almip }} kafka.lm >> /etc/hosts"
+
+- name: Start SIPP against target SIP server
+  become: yes
+  shell: |
+    nohup /opt/sipp-3.5.2/sipp -bg -sf /opt/myuac.xml -trace_stat -fd 3 -d 5000 -i {{ ip }} -s 1001 {{ target_ip }} -max_retrans 1 -recv_timeout 5000 -send_timeout 2000 -l 8 -mp 5606 </dev/null >/dev/null 2>&1 & 
+    sleep 1
+
+- name: Start Collectd for metric publication
+  become: yes
+  raw: "nohup collectd -C /etc/collectd/collectd.conf < /dev/null > /dev/null 2>&1"
+ 
