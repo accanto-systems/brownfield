@@ -13,10 +13,16 @@
      command: "nohup asterisk < /dev/null > /dev/null 2>&1 & sleep 1"
      when: asterisk_status.stdout.find('asterisk') == -1
 
+   - name: Make sure collectd is not running
+     become: yes
+     shell: "pkill collectd" 
+     when: asterisk_status.stdout.find('collectd') != -1
+     ignore_errors: yes
+
    - name: Start Collectd for metric publication
      become: yes
      raw: "nohup collectd -C /etc/collectd/collectd.conf < /dev/null > /dev/null 2>&1"
-     when: asterisk_status.stdout.find('asterisk') == -1
+     
 
    - name: set the stack_id to null
      set_fact: 

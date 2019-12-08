@@ -48,24 +48,24 @@
     template:
       src: ./config/pythonmonitor/monitor.py
       dest: /pythonmonitor/
-    when: pythonmonitor_file.stat.exists != true
+    # when: pythonmonitor_file.stat.exists != true
 
-  - name: check if collectd file exists
-    stat: 
-      path: /etc/collectd/collectd.conf
-    register: collectd_file
+  # - name: check if collectd file exists
+  #   stat: 
+  #     path: /etc/collectd/collectd.conf
+  #   register: collectd_file
 
   - name: create /etc/collectd
     file: 
       path: /etc/collectd
       state: directory
-    when: collectd_file.stat.exists != true
+    # when: collectd_file.stat.exists != true
 
   - name: copy collectd.conf
     copy:
       src: ./config/collectd.conf
       dest: /etc/collectd/collectd.conf
-    when: collectd_file.stat.exists != true
+    # when: collectd_file.stat.exists != true
       
   - name: add kafka.lm to hosts
     lineinfile:

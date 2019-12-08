@@ -8,7 +8,13 @@
    - name: Check if Asterisk is running
      shell: "ps aux"
      register: asterisk_status
-     
+
+   - name: Stop collectd
+     become: yes
+     shell: "pkill collectd" 
+     when: asterisk_status.stdout.find('collectd') != -1
+     ignore_errors: yes  
+
    - name: get pid of asterisk
      shell: pgrep asterisk
      become: true
@@ -28,8 +34,3 @@
      ignore_errors: yes
    
 
-   - name: Stop collectd
-     become: yes
-     shell: "pkill collectd" 
-     when: asterisk_status.stdout.find('collectd') != -1
-     ignore_errors: yes
