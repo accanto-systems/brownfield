@@ -1,0 +1,97 @@
+heat_template_version: "2018-08-31"
+description: "Base infrastructure for Brownfield Demo"
+
+resources:
+
+  aio_tenant_net: 
+    type: "OS::Neutron::Net"
+    properties: 
+      admin_state_up: true
+      name: aio_tenant_net
+
+  aio_tenant_subnet: 
+    type: "OS::Neutron::Subnet"
+    properties: 
+      network: { get_resource: aio_tenant_net }
+      name: aio_tenant_subnet
+      enable_dhcp: true
+      dns_nameservers:
+        - 8.8.8.8
+      cidr: "172.20.2.0/24"
+
+  aio_tenant_security_group: 
+    type: "OS::Neutron::SecurityGroup"
+    properties: 
+      rules: 
+        - port_range_min: 1
+          port_range_max: 65535
+          protocol: udp 
+        - port_range_min: 1
+          port_range_max: 65535
+          protocol: tcp
+        - remote_ip_prefix: 0.0.0.0/0
+          protocol: icmp
+      name: aio_tenant_security_group
+
+  aio_router:
+    type: "OS::Neutron::Router"
+    properties: 
+      admin_state_up: true
+      name: aio_router
+      external_gateway_info:
+        network: "public"
+
+  aio_tenant_routerinterface: 
+    type: "OS::Neutron::RouterInterface"
+    properties: 
+      router: { get_resource: aio_router }
+      subnet: { get_resource: aio_tenant_subnet }
+
+  aio_tenant_port: 
+    type: "OS::Neutron::Port"
+    properties: 
+      admin_state_up: true
+      fixed_ips:
+        - subnet: { get_resource: aio_tenant_subnet }
+      security_groups: 
+        - { get_resource: aio_tenant_security_group }
+      name: aio_tenant_port
+      network: { get_resource: aio_tenant_net }
+
+  aio_floating_ip:
+    type: OS::Neutron::FloatingIP
+    properties:
+      floating_network: "public"
+      port_id: { get_resource: aio_tenant_port }
+
+  aio: 
+    type: "OS::Nova::Server"
+    properties: 
+      networks: 
+        - port: { get_resource: aio_tenant_port }
+      name: aio
+      flavor: alm
+      key_name: default
+      image: bionic-server-cloudimg-amd64
+      config_drive: true
+      user_data_format: RAW
+      user_data: |
+        #cloud-config
+        manage_etc_hosts: true
+        bootcmd: 
+         - [ sysctl, net.ipv4.ip_forward=1 ]
+         - [ sh, -c, echo 'nameserver 8.8.8.8' > /etc/resolv.conf ]
+        ssh_pwauth: True
+        password: ubuntu
+        apt:
+          primary:
+            - arches: [default]
+              uri: http://gb.archive.ubuntu.com/ubuntu/
+        chpasswd:
+          list: |
+            ubuntu:ubuntu
+          expire: False
+
+outputs:
+  aio_public_ip: 
+    value: { get_attr: [ aio_floating_ip , floating_ip_address ] }
