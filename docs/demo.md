@@ -1,7 +1,7 @@
 # Running the demo
 
 
-## Install VoIP manually
+## Install VoIP network service manually
 
 In visual studio
 * Show HEAT template

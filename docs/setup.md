@@ -40,27 +40,18 @@ lm_theme_name: bluerinse
 ### Dependencies
 
 ```
-sudo apt-get install python3-pip
+sudo apt-get install python3-pip sshpass python-apt
 pip3 install ansible
 ```
 
-To install AOI on your machine:
-
-```
-sudo apt-get install sshpass
-sudo apt-get install python-apt
-```
-
-If you are installing on an existing Ubuntu box:
+If you are installing on an existing server:
 
 ```
 sudo service apparmor start
 sudo apt-get purge apache2
 ```
 
-Update the inventory as per instructions 
-
-Create your AIO by running the following command:
+Update the allinone inventory as per instructions on github and create your AIO by running the following commands:
 
 ```
 ansible-galaxy install -r ansible/requirements.yml -p ansible/roles
@@ -102,7 +93,7 @@ In a command shell you need to set the following environment variable to point t
 export LMCONFIG=~/lmconfig.yaml
 ```
 
-## Install 2.1 Drivers
+## Install Drivers
 
 Log into the AIO box @ AIO_FLOATING_IP. Username/Password is ubuntu/ubuntu and run the following commands to attach required Resource Manager drivers. 
 
@@ -158,19 +149,3 @@ os_api_url: http://192.168.10.10:5000
 almip: AIO_FLOATING_IP
 ```
 
-
-https://10.220.219.129/ui
-
-## Add kafka viewer to AIO
-
-https://github.com/lensesio/kafka-topics-ui
-
-```
-docker pull landoop/kafka-topics-ui
-    docker run --rm -it -p 8000:8000 \
-               -e "KAFKA_REST_PROXY_URL=http://kafka-rest-proxy-host:port" \
-               -e "PROXY=true" \
-               landoop/kafka-topics-ui
-```
-
-https://www.kafkamagic.com/
